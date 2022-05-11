@@ -34,6 +34,7 @@ public class Game
     public enum GameResult { NotFinished, Player1_Won, Player2_Won, Draw }
     public GameResult Result { get; set; }
 
+    public static readonly (int X, int Y) BoardSize = (10, 10);
     public ICollection<TileData> BoardData { get; set; }
     public TileData.TileState? GetTile(int x, int y)
         => BoardData.FirstOrDefault(tile => tile.X == x && tile.Y == y)?.State;
