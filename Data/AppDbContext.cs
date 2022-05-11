@@ -46,21 +46,11 @@ namespace HappyTeam_BattleShips.Data
 					}
 			
 
-			builder.Entity<Player>()
-					.HasMany<Game>(e => e.Games)
-					.WithOne(e => e.Player1)
-					.HasForeignKey(e => e.Player1_ID);
+
 			
 			builder.Entity<Game>()
-					.Ignore(e => e.Player2)
-					.HasOne(e => e.Player2)
-					.WithMany(e => e.Games)
-					.HasForeignKey(e => e.Player2_ID);
-			// builder.Entity<Player>()
-			// 		.HasMany<Game>(e => e.Games)
-			// 		.WithOne(e => e.Player2)
-			// 		.HasForeignKey(e => e.Player2_ID);
-			
+					.HasMany<Player>(e => e.Players)
+					.WithMany(e => e.Games);
 			builder.Entity<Game>()
 					.HasMany<TileData>(e => e.BoardData)
 					.WithOne(e => e.Game)

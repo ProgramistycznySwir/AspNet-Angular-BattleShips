@@ -18,10 +18,7 @@ public class Game
     /// </summary>
     public DateTime LastMove { get; set; }
 
-    public PlayerID Player1_ID { get; set; }
-    public Player Player1 { get; set; }
-    public PlayerID Player2_ID { get; set; }
-    public Player Player2 { get; set; }
+    public ICollection<Player> Players { get; set; }
 
     public bool IsFinished => Result is not GameResult.NotFinished;
     public enum GameResult { NotFinished, Player1_Won, Player2_Won, Draw }
