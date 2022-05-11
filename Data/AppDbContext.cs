@@ -49,6 +49,9 @@ namespace HappyTeam_BattleShips.Data
 
 			builder.Entity<GamePlayer>()
 					.HasKey(e => new { e.subID, e.Game_ID });
+			builder.Entity<Player>()
+					.Property(e => e.ID)
+					.HasDefaultValue(PlayerID.Empty);
 			
 			builder.Entity<Game>()
 					.HasMany<GamePlayer>(e => e.Players)

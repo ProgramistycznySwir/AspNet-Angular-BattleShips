@@ -1,12 +1,17 @@
 using HappyTeam_BattleShips.Data;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using HappyTeam_BattleShips.Services;
 
 
 #region >>> builder config <<<
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// DB:
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Filename=HappyTeam-BattleShips.db"));
+
+DependancyInjection.RegisterDependancies(builder);
 
 // Swagger:
 builder.Services.AddEndpointsApiExplorer();
@@ -24,7 +29,6 @@ builder.Services.AddControllersWithViews();
 #region >>> app config <<<
 var app = builder.Build();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Filename=HappyTeam-BattleShips.db"));
 
 // Swagger:
 app.UseSwagger();
@@ -44,6 +48,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseWebSockets(new WebSocketOptions {
+        KeepAliveInterval = TimeSpan.FromMinutes(2)
+    });
+// app.Run(async (context) =>
+// {
+//     using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+//     var socketFinishedTcs = new TaskCompletionSource<object>();
+
+//     BackgroundSocketProcessor.AddSocket(webSocket, socketFinishedTcs);
+
+//     await socketFinishedTcs.Task;
+// });
 
 app.MapControllerRoute(
     name: "default",

@@ -36,7 +36,7 @@ namespace HappyTeam_BattleShips.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.GamePlayer", b =>
@@ -56,7 +56,7 @@ namespace HappyTeam_BattleShips.Migrations
 
                     b.HasIndex("Player_ID");
 
-                    b.ToTable("GamePlayer");
+                    b.ToTable("GamePlayer", (string)null);
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.Player", b =>
@@ -77,7 +77,7 @@ namespace HappyTeam_BattleShips.Migrations
 
                     b.HasIndex("PublicID");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.TileData", b =>
@@ -93,7 +93,7 @@ namespace HappyTeam_BattleShips.Migrations
 
                     b.HasKey("Game_ID", "X", "Y");
 
-                    b.ToTable("TileData");
+                    b.ToTable("TileData", (string)null);
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.GamePlayer", b =>

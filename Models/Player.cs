@@ -24,3 +24,14 @@ public class Player
     
     public ICollection<GamePlayer> Games { get; set; }
 }
+
+public static class Player_Ext
+{
+    public static Player GetSanitised(this Player self)
+        => new Player {
+                ID = PlayerID.Empty,
+                PublicID = self.PublicID,
+                CreationTime = self.CreationTime,
+                LastUsedTime = self.LastUsedTime,
+            };
+}
