@@ -5,7 +5,7 @@ namespace HappyTeam_BattleShips.Models;
 public class TileData
 {
     [Key]
-    public GameID Game_ID { get; set; }
+    public Guid Game_ID { get; set; }
     public Game Game { get; set; }
     [Key]
     public byte X { get; set; }

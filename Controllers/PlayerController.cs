@@ -17,16 +17,16 @@ public class PlayerController : ControllerBase
         _playerService = playerService;
     }
 
-    [HttpGet]
-    public ActionResult<Player> GetPlayer([FromRoute] PlayerID id)
+    [HttpGet("{id}")]
+    public ActionResult<Player> GetPlayer([FromRoute] Guid id)
     {
         var player = _playerService.GetPlayer(id: id);
         if(player is null)
             return base.NotFound(id);
         return base.Ok(player);
     }
-    [HttpGet("/OtherPlayer")]
-    public ActionResult<Player> GetOtherPlayer([FromRoute] PlayerID publicID)
+    [HttpGet("/OtherPlayer/{publicID}")]
+    public ActionResult<Player> GetOtherPlayer([FromRoute] Guid publicID)
     {
         var player = _playerService.GetPlayerByPublicID(publicID: publicID);
         if(player is null)

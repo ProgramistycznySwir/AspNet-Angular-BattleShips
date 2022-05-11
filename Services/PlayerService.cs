@@ -16,8 +16,8 @@ public class PlayerService : IPlayerService
     public Player AddPlayer()
     {
         var player = new Player {
-            ID = new PlayerID(Guid.NewGuid()),
-            PublicID = new PlayerID(Guid.NewGuid()),
+            ID = Guid.NewGuid(),
+            PublicID = Guid.NewGuid(),
             CreationTime = DateTime.Now,
             LastUsedTime = DateTime.Now,
         };
@@ -26,10 +26,10 @@ public class PlayerService : IPlayerService
         return player;
     }
 
-    public Player GetPlayer(PlayerID id)
+    public Player GetPlayer(Guid id)
         => _context.Players.Find(id);
 
-    public Player GetPlayerByPublicID(PlayerID publicID)
+    public Player GetPlayerByPublicID(Guid publicID)
         => _context.Players
                 .FirstOrDefault(player => player.PublicID.Equals(publicID))
                 ?.GetSanitised();

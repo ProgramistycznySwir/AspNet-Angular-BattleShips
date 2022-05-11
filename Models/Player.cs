@@ -1,23 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using StronglyTypedIds;
 
 namespace HappyTeam_BattleShips.Models;
 
-
-[StronglyTypedId(backingType: StronglyTypedIdBackingType.Guid,
-        converters: StronglyTypedIdConverter.EfCoreValueConverter)]
-public partial struct PlayerID{}
 
 [Index(nameof(PublicID))]
 public class Player
 {
     [Key]
-    public PlayerID ID { get; set; }
+    public Guid ID { get; set; }
     /// <summary>
     /// Used when creating games, as ID is only visible to player, not to others.
     /// </summary>
-    public PlayerID PublicID { get; set; }
+    public Guid PublicID { get; set; }
 
     public DateTime CreationTime { get; set; }
     public DateTime LastUsedTime { get; set; }
@@ -29,7 +24,7 @@ public static class Player_Ext
 {
     public static Player GetSanitised(this Player self)
         => new Player {
-                ID = PlayerID.Empty,
+                ID = Guid.Empty,
                 PublicID = self.PublicID,
                 CreationTime = self.CreationTime,
                 LastUsedTime = self.LastUsedTime,

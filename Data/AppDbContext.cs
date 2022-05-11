@@ -36,22 +36,10 @@ namespace HappyTeam_BattleShips.Data
 		//                 case nameof(SummaryRatingID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new SummaryRatingID.EfCoreValueConverter()); break;
 		//                 default: continue;
 		//             }
-			foreach (var entityType in builder.Model.GetEntityTypes())
-				foreach(var prop in entityType.ClrType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-					switch(prop.PropertyType.Name)
-					{
-						case nameof(GameID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new GameID.EfCoreValueConverter()); break;
-						case nameof(PlayerID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new PlayerID.EfCoreValueConverter()); break;
-						case nameof(GamePlayerSubID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new GamePlayerSubID.EfCoreValueConverter()); break;
-						default: continue;
-					}
 			
 
 			builder.Entity<GamePlayer>()
 					.HasKey(e => new { e.subID, e.Game_ID });
-			builder.Entity<Player>()
-					.Property(e => e.ID)
-					.HasDefaultValue(PlayerID.Empty);
 			
 			builder.Entity<Game>()
 					.HasMany<GamePlayer>(e => e.Players)
