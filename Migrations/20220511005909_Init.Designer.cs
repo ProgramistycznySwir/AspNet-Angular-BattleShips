@@ -11,28 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HappyTeam_BattleShips.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220511003643_Init")]
+    [Migration("20220511005909_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
-
-            modelBuilder.Entity("GamePlayer", b =>
-                {
-                    b.Property<Guid>("GamesID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("PlayersID")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("GamesID", "PlayersID");
-
-                    b.HasIndex("PlayersID");
-
-                    b.ToTable("GamePlayer");
-                });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.Game", b =>
                 {
@@ -48,9 +33,32 @@ namespace HappyTeam_BattleShips.Migrations
                     b.Property<int>("Result")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Turn")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
-                    b.ToTable("Achievements");
+                    b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("HappyTeam_BattleShips.Models.GamePlayer", b =>
+                {
+                    b.Property<int>("subID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Game_ID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("Player_ID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("subID", "Game_ID");
+
+                    b.HasIndex("Game_ID");
+
+                    b.HasIndex("Player_ID");
+
+                    b.ToTable("GamePlayer");
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.Player", b =>
@@ -60,7 +68,7 @@ namespace HappyTeam_BattleShips.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("AchievementCategories");
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.TileData", b =>
@@ -76,22 +84,26 @@ namespace HappyTeam_BattleShips.Migrations
 
                     b.HasKey("Game_ID", "X", "Y");
 
-                    b.ToTable("Areas");
+                    b.ToTable("TileData");
                 });
 
-            modelBuilder.Entity("GamePlayer", b =>
+            modelBuilder.Entity("HappyTeam_BattleShips.Models.GamePlayer", b =>
                 {
-                    b.HasOne("HappyTeam_BattleShips.Models.Game", null)
-                        .WithMany()
-                        .HasForeignKey("GamesID")
+                    b.HasOne("HappyTeam_BattleShips.Models.Game", "Game")
+                        .WithMany("Players")
+                        .HasForeignKey("Game_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HappyTeam_BattleShips.Models.Player", null)
-                        .WithMany()
-                        .HasForeignKey("PlayersID")
+                    b.HasOne("HappyTeam_BattleShips.Models.Player", "Player")
+                        .WithMany("Games")
+                        .HasForeignKey("Player_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("HappyTeam_BattleShips.Models.TileData", b =>
@@ -108,6 +120,13 @@ namespace HappyTeam_BattleShips.Migrations
             modelBuilder.Entity("HappyTeam_BattleShips.Models.Game", b =>
                 {
                     b.Navigation("BoardData");
+
+                    b.Navigation("Players");
+                });
+
+            modelBuilder.Entity("HappyTeam_BattleShips.Models.Player", b =>
+                {
+                    b.Navigation("Games");
                 });
 #pragma warning restore 612, 618
         }

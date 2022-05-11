@@ -18,7 +18,17 @@ public class Game
     /// </summary>
     public DateTime LastMove { get; set; }
 
-    public ICollection<Player> Players { get; set; }
+    public int Turn { get; set; }
+    public Player GetCurrentlyMovingPlayer()
+        => Players.First(e => e.subID.Value == Turn).Player;
+    public Game IncrementPlayerTurn()
+    {
+        Turn++;
+        if(Turn >= Players.Count)
+            Turn = 0;
+        return this; // Fluent
+    }
+    public ICollection<GamePlayer> Players { get; set; }
 
     public bool IsFinished => Result is not GameResult.NotFinished;
     public enum GameResult { NotFinished, Player1_Won, Player2_Won, Draw }

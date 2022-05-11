@@ -10,32 +10,33 @@ namespace HappyTeam_BattleShips.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AchievementCategories",
+                name: "Games",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastMove = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Turn = table.Column<int>(type: "INTEGER", nullable: false),
+                    Result = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Players",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AchievementCategories", x => x.ID);
+                    table.PrimaryKey("PK_Players", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Achievements",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LastMove = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Result = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Achievements", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Areas",
+                name: "TileData",
                 columns: table => new
                 {
                     Game_ID = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -44,11 +45,11 @@ namespace HappyTeam_BattleShips.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Areas", x => new { x.Game_ID, x.X, x.Y });
+                    table.PrimaryKey("PK_TileData", x => new { x.Game_ID, x.X, x.Y });
                     table.ForeignKey(
-                        name: "FK_Areas_Achievements_Game_ID",
+                        name: "FK_TileData_Games_Game_ID",
                         column: x => x.Game_ID,
-                        principalTable: "Achievements",
+                        principalTable: "Games",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -57,45 +58,51 @@ namespace HappyTeam_BattleShips.Migrations
                 name: "GamePlayer",
                 columns: table => new
                 {
-                    GamesID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayersID = table.Column<Guid>(type: "TEXT", nullable: false)
+                    subID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Game_ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Player_ID = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GamePlayer", x => new { x.GamesID, x.PlayersID });
+                    table.PrimaryKey("PK_GamePlayer", x => new { x.subID, x.Game_ID });
                     table.ForeignKey(
-                        name: "FK_GamePlayer_AchievementCategories_PlayersID",
-                        column: x => x.PlayersID,
-                        principalTable: "AchievementCategories",
+                        name: "FK_GamePlayer_Games_Game_ID",
+                        column: x => x.Game_ID,
+                        principalTable: "Games",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GamePlayer_Achievements_GamesID",
-                        column: x => x.GamesID,
-                        principalTable: "Achievements",
+                        name: "FK_GamePlayer_Players_Player_ID",
+                        column: x => x.Player_ID,
+                        principalTable: "Players",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GamePlayer_PlayersID",
+                name: "IX_GamePlayer_Game_ID",
                 table: "GamePlayer",
-                column: "PlayersID");
+                column: "Game_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GamePlayer_Player_ID",
+                table: "GamePlayer",
+                column: "Player_ID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Areas");
-
-            migrationBuilder.DropTable(
                 name: "GamePlayer");
 
             migrationBuilder.DropTable(
-                name: "AchievementCategories");
+                name: "TileData");
 
             migrationBuilder.DropTable(
-                name: "Achievements");
+                name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "Games");
         }
     }
 }

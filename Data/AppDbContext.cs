@@ -6,9 +6,9 @@ namespace HappyTeam_BattleShips.Data
 {
 	public class AppDbContext : DbContext
 	{
-		public DbSet<Game> Achievements { get; set; }
-		public DbSet<Player> AchievementCategories { get; set; }
-		public DbSet<TileData> Areas { get; set; }
+		public DbSet<Game> Games { get; set; }
+		public DbSet<Player> Players { get; set; }
+		public DbSet<TileData> TileData { get; set; }
 
 		public AppDbContext(DbContextOptions<AppDbContext> options)
 			: base(options)
@@ -42,15 +42,23 @@ namespace HappyTeam_BattleShips.Data
 					{
 						case nameof(GameID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new GameID.EfCoreValueConverter()); break;
 						case nameof(PlayerID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new PlayerID.EfCoreValueConverter()); break;
+						case nameof(GamePlayerSubID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new GamePlayerSubID.EfCoreValueConverter()); break;
 						default: continue;
 					}
 			
 
-
+			builder.Entity<GamePlayer>()
+					.HasKey(e => new { e.subID, e.Game_ID });
 			
 			builder.Entity<Game>()
-					.HasMany<Player>(e => e.Players)
-					.WithMany(e => e.Games);
+					.HasMany<GamePlayer>(e => e.Players)
+					.WithOne(e => e.Game)
+					.HasForeignKey(e => e.Game_ID);
+			builder.Entity<Player>()
+					.HasMany<GamePlayer>(e => e.Games)
+					.WithOne(e => e.Player)
+					.HasForeignKey(e => e.Player_ID);
+			
 			builder.Entity<Game>()
 					.HasMany<TileData>(e => e.BoardData)
 					.WithOne(e => e.Game)

@@ -12,5 +12,6 @@ public class Player
 {
     [Key]
     public PlayerID ID { get; set; }
-    public ICollection<Game> Games { get; set; }
+    
+    public ICollection<GamePlayer> Games { get; set; }
 }
