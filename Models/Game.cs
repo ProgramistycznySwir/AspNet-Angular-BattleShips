@@ -15,7 +15,7 @@ public class Game
 
     public int Turn { get; set; }
     public Player GetCurrentlyMovingPlayer()
-        => Players.First(e => e.subID == Turn).Player;
+        => Players.First(e => e.SubID == Turn).Player;
     public Game IncrementPlayerTurn()
     {
         Turn++;
@@ -31,6 +31,6 @@ public class Game
 
     public static readonly (int X, int Y) BoardSize = (10, 10);
     public ICollection<TileData> BoardData { get; set; }
-    public TileData.TileState? GetTile(int x, int y)
-        => BoardData.FirstOrDefault(tile => tile.X == x && tile.Y == y)?.State;
+    public TileData GetTile(int x, int y)
+        => BoardData.FirstOrDefault(tile => tile.X == x && tile.Y == y);
 }
