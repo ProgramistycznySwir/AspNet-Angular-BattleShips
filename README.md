@@ -14,3 +14,5 @@ Id w modelach chciałem zrealizować przy pomocy StronglyTypedIds zgodnie z DDD,
 
 
 W środę zaczęło mi się mocno rzucać w oczy, że przeszacowałem siły nad zamiary, gdzie z powodu perfekcjonizmu dalej próbuję zrobić jak najlepszy back-end, zamiast skupić się nad tym by aplikacjia jakkolwiek działała.
+
+Sądzę, że powinienem jednak dokonać większego rozdzielenia domeny, chociażby po to, że otrzymałbym za darmo wycięcie obiektów z modeli kiedy chciałbym je wysyłać jeśli bym skorzystał z AutoMapper'a.

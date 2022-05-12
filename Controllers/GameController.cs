@@ -24,7 +24,7 @@ public class GameController : ControllerBase
         var game = _gameService.GetGame(id: gameID);
         if(game is null)
             return base.NotFound(gameID);
-        return base.Ok(game);
+        return base.Ok(game.GetSanitised());
     }
     [HttpGet("{gameID}/{perspectiveID}")]
     public ActionResult<Game> GetGameFromPerspective([FromRoute] Guid gameID, [FromRoute] Guid perspectiveID)
@@ -32,7 +32,7 @@ public class GameController : ControllerBase
         var game = _gameService.GetGameFromPerspective(gameID, perspectiveID);
         if(game is null)
             return base.NotFound($"gameID: {gameID}, perspectiveID: {perspectiveID}");
-        return base.Ok(game);
+        return base.Ok(game.GetSanitised());
     }
     [HttpPost("AddMove")]
     public ActionResult<TileData> AddMove(Guid gameID, Guid playerID, int x, int y)
@@ -40,7 +40,7 @@ public class GameController : ControllerBase
         var tile = _gameService.AddMove(gameID, playerID, x, y);
         if(tile is null)
             return base.BadRequest($"gameID: {gameID}, playerID: {playerID}, pos: (${x}, ${y})");
-        return base.Ok(tile);
+        return base.Ok(tile.GetSanitised());
     }
     [HttpPost("CreateGame")]
     public ActionResult<Game> CreateGame(Guid player1_ID, Guid? player2_ID = null)
@@ -53,6 +53,6 @@ public class GameController : ControllerBase
 
         if(game is null)
             return base.BadRequest($"player1_ID: {player1_ID}, player2_ID: {player2_ID}");
-        return base.Ok(game);
+        return base.Ok(game.GetSanitised());
     }
 }

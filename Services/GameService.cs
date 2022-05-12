@@ -14,7 +14,7 @@ public class GameService : IGameService
         _context = context;
     }
 
-    public Game AddGame(Guid id1)
+    public Game AddGame(Guid publicID1, Guid? publicID2= null)
     {
         var newGame_ID = new Guid();
         var newGame = new Game {
@@ -22,25 +22,31 @@ public class GameService : IGameService
                 CreationTime = DateTime.Now,
                 LastMove = DateTime.Now,
             };
-        _context.Games.Add(newGame);
-        newGame.Players = new List<GamePlayer> { 
-            new GamePlayer { 
-                    SubID = 0,
-                    Game_ID = newGame_ID,
-                    Player_ID = id1
-                }};
-        _context.SaveChanges();
-        return newGame;
-    }
+        if(newGame is null)
+            return null;
+        var player1 = _context.Players.Where(e => e.PublicID == publicID1).FirstOrDefault();
+        if(player1 is null)
+            return null;
+        newGame.Players = new List<GamePlayer> {
+                new GamePlayer { 
+                        SubID = 0,
+                        Game_ID = newGame.ID,
+                        Player_ID = player1.ID,
+                    }
+            };
+        if(publicID2 is not null)
+        {
+            var player2 = _context.Players.Where(e => e.PublicID == publicID2).FirstOrDefault();
+            if(player2 is null)
+                return null;
+            newGame.Players.Add(new GamePlayer { 
+                    SubID = 1,
+                    Game_ID = newGame.ID,
+                    Player_ID = player2.ID,
+                });
+        }
 
-    public Game AddGame(Guid id1, Guid id2)
-    {
-        var newGame = AddGame(id1);
-        newGame.Players.Add(new GamePlayer { 
-                SubID = 0,
-                Game_ID = newGame.ID,
-                Player_ID = id2
-            });
+        _context.Games.Add(newGame);
         _context.SaveChanges();
         return newGame;
     }
@@ -50,7 +56,6 @@ public class GameService : IGameService
     /// <returns>Null indicates invalid request.</returns>
     public TileData AddMove(Guid gameID, Guid playerID, int x, int y)
     {
-        // _context.Games.Include(e => e.BoardData).Include(e => e.Players).Find(gameID)
         var game = GetGame(gameID);
         if(game is null)
             return null;
@@ -62,7 +67,7 @@ public class GameService : IGameService
         var tile = game.GetTile(x, y);
 
         if(tile is null)
-            game.BoardData.Add(new TileData { Game_ID = game.ID, X= (byte)x, Y= (byte)y, IsMiss = true, Player_SubID = gamePlayer.SubID });
+            game.BoardData.Add(tile = new TileData { Game_ID = game.ID, X= (byte)x, Y= (byte)y, IsMiss = true, Player_SubID = gamePlayer.SubID });
         else if(tile.IsMiss)
             return null;
         else if(tile.Player_SubID == gamePlayer.SubID)
@@ -78,20 +83,22 @@ public class GameService : IGameService
     // private TileData AddMove(Game game, )
 
     public Game GetGame(Guid id)
-    {
-        return _context.Games.Where(e => e.ID == id)
+        => _context.Games.Where(e => e.ID == id)
                 .Include(e => e.BoardData)
                 .Include(e => e.Players)
-                .FirstOrDefault();
-    }
+                .ThenInclude(e => e.Player)
+                .FirstOrDefault()!;
 
     public Game GetGameFromPerspective(Guid id, Guid perspective_ID)
     {
         var game = _context.Games.Where(e => e.ID == id)
                 .Include(e => e.BoardData)
                 .Include(e => e.Players)
+                .ThenInclude(e => e.Player)
                 .AsNoTracking()
                 .FirstOrDefault();
+        if(game is null)
+            return null;
         var gamePlayer = game.Players.Where(player => player.Player_ID == perspective_ID).FirstOrDefault();
         if(gamePlayer is null) // Invalid perspective.
             return null;

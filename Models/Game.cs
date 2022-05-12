@@ -33,4 +33,45 @@ public class Game
     public ICollection<TileData> BoardData { get; set; }
     public TileData GetTile(int x, int y)
         => BoardData.FirstOrDefault(tile => tile.X == x && tile.Y == y);
+
+    public static ICollection<TileData> GenerateBoard((int X, int Y) boardSize)
+    {
+        var shipSizes = TileData.ShipSizes.Select(item => item).ToList();
+        shipSizes.Sort();
+        shipSizes.Reverse();
+
+        TileData[,] board = new TileData[10, 10];
+        Random rng = new Random();
+        (int x, int y) GetRandomPos() => (rng.Next(10), rng.Next(10));
+
+        //TODO: Implement GenerateBoard() in more tidy way. Gosh it's ugly...
+        while (true)
+        {
+            foreach(byte size in shipSizes)
+            {
+                for (int @try = 16; @try > 0; @try--) // Try 16 times to place each ship before giving up
+                {
+                    
+                }
+                goto RETRY_BOARD;
+                NEXT_SHIP: ;
+            }
+            RETRY_BOARD: ;
+        }
+    }
+}
+
+public static class Game_Ext 
+{
+    public static Game GetSanitised(this Game self)
+    {
+        return new Game {
+            ID= self.ID,
+            CreationTime= self.CreationTime,
+            LastMove= self.LastMove,
+            Turn= self.Turn,
+            Players= self.Players.Select(e => e.GetSanitised()).ToList(),
+            BoardData= self.BoardData.Select(e => e.GetSanitised()).ToList()
+        };
+    }
 }
