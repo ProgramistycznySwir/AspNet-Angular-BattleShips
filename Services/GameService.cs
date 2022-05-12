@@ -22,11 +22,9 @@ public class GameService : IGameService
                 CreationTime = DateTime.Now,
                 LastMove = DateTime.Now,
             };
-        if(newGame is null)
-            return null;
         var player1 = _context.Players.Where(e => e.PublicID == publicID1).FirstOrDefault();
         if(player1 is null)
-            return null;
+            return null; // Couldn't find player with id {publicID1}
         newGame.Players = new List<GamePlayer> {
                 new GamePlayer { 
                         SubID = 0,
@@ -38,8 +36,8 @@ public class GameService : IGameService
         {
             var player2 = _context.Players.Where(e => e.PublicID == publicID2).FirstOrDefault();
             if(player2 is null)
-                return null;
-            newGame.Players.Add(new GamePlayer { 
+                return null; // Couldn't find player with id {publicID2}
+            newGame.Players.Add(new GamePlayer {
                     SubID = 1,
                     Game_ID = newGame.ID,
                     Player_ID = player2.ID,
@@ -62,20 +60,20 @@ public class GameService : IGameService
     {
         var game = GetGame(gameID);
         if(game is null)
-            return null;
+            return null; // Couldn't find game with id {gameID}
 
         var gamePlayer = game.Players.FirstOrDefault(player => player.Player_ID == playerID);
         if(gamePlayer is null)
-            return null;
+            return null; // Couldn't find player with id {playerID}
 
         var tile = game.GetTile(x, y);
 
         if(tile is null)
             game.BoardData.Add(tile = new TileData { Game_ID = game.ID, X= (byte)x, Y= (byte)y, IsMiss = true, Player_SubID = gamePlayer.SubID });
         else if(tile.IsMiss)
-            return null;
+            return null; // Requested tile ({x}, {y}) is already miss
         else if(tile.Player_SubID == gamePlayer.SubID)
-            return null;
+            return null; // Requested tile ({x}, {y}) is your own ship
         else 
             tile.IsHit = true;
 
@@ -102,10 +100,10 @@ public class GameService : IGameService
                 .AsNoTracking()
                 .FirstOrDefault();
         if(game is null)
-            return null;
+            return null; // Couldn't find game with id {id}
         var gamePlayer = game.Players.Where(player => player.Player_ID == perspective_ID).FirstOrDefault();
         if(gamePlayer is null) // Invalid perspective.
-            return null;
+            return null; // Couldn't find player with privateID {perspective_ID} in game {id}
         // Sanitising BoardData.
         game.BoardData = game.BoardData.Where(tile => tile.IsMiss is true
                                                     || tile.IsHit is true
