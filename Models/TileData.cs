@@ -17,7 +17,7 @@ public class TileData
     public bool IsHit { get; set; }
     public int Player_SubID { get; set; }
 
-    public bool ShipSize { get; set; }
+    public byte ShipSize { get; set; }
     public static readonly List<byte> ShipSizes = new List<byte> { 2, 3, 3, 4, 5 };
 }
 

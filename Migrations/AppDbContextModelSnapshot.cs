@@ -102,7 +102,7 @@ namespace HappyTeam_BattleShips.Migrations
                     b.Property<int>("Player_SubID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShipSize")
+                    b.Property<byte>("ShipSize")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Game_ID", "X", "Y");

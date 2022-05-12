@@ -4,16 +4,16 @@
 
 namespace HappyTeam_BattleShips.Migrations
 {
-    public partial class AddedShipSizeToTileData : Migration
+    public partial class _20220512125136_AddedShipSizeToTileData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
+            migrationBuilder.AddColumn<byte>(
                 name: "ShipSize",
                 table: "TileData",
                 type: "INTEGER",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: (byte)0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

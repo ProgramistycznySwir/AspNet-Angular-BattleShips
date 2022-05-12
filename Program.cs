@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using HappyTeam_BattleShips.Services;
 
 
+HappyTeam_BattleShips.Models.Game.GenerateBoard();
+return;
+
 #region >>> builder config <<<
 var builder = WebApplication.CreateBuilder(args);
 

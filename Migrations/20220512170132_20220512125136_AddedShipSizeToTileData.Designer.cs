@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HappyTeam_BattleShips.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220512125136_AddedShipSizeToTileData")]
-    partial class AddedShipSizeToTileData
+    [Migration("20220512170132_20220512125136_AddedShipSizeToTileData")]
+    partial class _20220512125136_AddedShipSizeToTileData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,7 +104,7 @@ namespace HappyTeam_BattleShips.Migrations
                     b.Property<int>("Player_SubID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShipSize")
+                    b.Property<byte>("ShipSize")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Game_ID", "X", "Y");

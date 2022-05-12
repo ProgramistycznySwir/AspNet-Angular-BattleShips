@@ -45,6 +45,10 @@ public class GameService : IGameService
                     Player_ID = player2.ID,
                 });
         }
+        List<TileData> board = Game.GenerateBoard();
+        for(int i = 0; i < newGame.BoardData.Count; i++)
+            board[i].Game_ID = newGame.ID;
+        newGame.BoardData = board;
 
         _context.Games.Add(newGame);
         _context.SaveChanges();
