@@ -16,6 +16,9 @@ public class GameService : IGameService
 
     public Game AddGame(Guid publicID1, Guid? publicID2= null)
     {
+        if(publicID1 == publicID2)
+            return null; // Can't create game with 2 same players (publicID1 and publicID2 should be different)
+
         var newGame_ID = new Guid();
         var newGame = new Game {
                 ID = newGame_ID,
@@ -82,9 +85,26 @@ public class GameService : IGameService
 
         return tile;
     }
-    // private TileData AddMove(Game game, )
 
-    public Game GetGame(Guid id)
+	public Game AddPlayerToGame(Guid gameID, Guid publicID2)
+	{
+        var player = _context.Players.Where(player => player.PublicID == publicID2).FirstOrDefault();
+        if(player is null)
+            return null; // Couldn't find player with PublicID {publicID2}
+
+        var game = GetGame(gameID);
+        game.Players.Add(new GamePlayer {
+                    SubID = 1,
+                    Game_ID = game.ID,
+                    Player_ID = player.ID,
+                });
+        _context.SaveChanges();
+        return game.GetSanitised();
+	}
+
+	// private TileData AddMove(Game game, )
+
+	public Game GetGame(Guid id)
         => _context.Games.Where(e => e.ID == id)
                 .Include(e => e.BoardData)
                 .Include(e => e.Players)

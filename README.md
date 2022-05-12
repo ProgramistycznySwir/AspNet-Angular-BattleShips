@@ -16,3 +16,7 @@ Id w modelach chciałem zrealizować przy pomocy StronglyTypedIds zgodnie z DDD,
 W środę zaczęło mi się mocno rzucać w oczy, że przeszacowałem siły nad zamiary, gdzie z powodu perfekcjonizmu dalej próbuję zrobić jak najlepszy back-end, zamiast skupić się nad tym by aplikacjia jakkolwiek działała.
 
 Sądzę, że powinienem jednak dokonać większego rozdzielenia domeny, chociażby po to, że otrzymałbym za darmo wycięcie obiektów z modeli kiedy chciałbym je wysyłać jeśli bym skorzystał z AutoMapper'a.
+
+Error checki są w projekcie zaimplementowane na odwal (serwer sprawdza wszystkie możliwe błędy, ale w razie wykrycia jakiegoś, nie pisze żadnych informacji odnośnie jaki błąd wykrył). Jeśli będę miał czas to postaram się to poprawić.
+
+TODO: Zauważyłem, że w kodzie jednego serwisu piszę kod innego serwisu (aka. wyszukuje graczy w GameService, zamiast skorzystać z już gotowych metod serwisu PlayerService). Warto to skorygować, by kod był DRY.

@@ -9,7 +9,8 @@ public interface IGameService
     /// </summary>
     public Game GetGame(Guid id);
     public Game GetGameFromPerspective(Guid id, Guid perspective_ID);
-    public Game AddGame(Guid id1, Guid? id2= null);
+    public Game AddGame(Guid publicID1, Guid? publicID2= null);
+    public Game AddPlayerToGame(Guid gameID, Guid publicID2);
     /// <summary>
     /// 
     /// </summary>

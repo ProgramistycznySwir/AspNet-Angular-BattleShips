@@ -18,14 +18,14 @@ public class GameController : ControllerBase
     }
 
     //TODO: Lock this endpoint from users, cause if used it grants unfair advantage.
-    [HttpGet("{gameID}")]
-    public ActionResult<Game> GetGame([FromRoute] Guid gameID)
-    {
-        var game = _gameService.GetGame(id: gameID);
-        if(game is null)
-            return base.NotFound(gameID);
-        return base.Ok(game.GetSanitised());
-    }
+    // [HttpGet("{gameID}")]
+    // public ActionResult<Game> GetGame([FromRoute] Guid gameID)
+    // {
+    //     var game = _gameService.GetGame(id: gameID);
+    //     if(game is null)
+    //         return base.NotFound(gameID);
+    //     return base.Ok(game.GetSanitised());
+    // }
     [HttpGet("{gameID}/{perspectiveID}")]
     public ActionResult<Game> GetGameFromPerspective([FromRoute] Guid gameID, [FromRoute] Guid perspectiveID)
     {
@@ -45,11 +45,7 @@ public class GameController : ControllerBase
     [HttpPost("CreateGame")]
     public ActionResult<Game> CreateGame(Guid player1_ID, Guid? player2_ID = null)
     {
-        Game game;
-        if(player2_ID is null)
-            game = _gameService.AddGame(player1_ID);
-        else
-            game = _gameService.AddGame(player1_ID, player2_ID.Value);
+        Game game = _gameService.AddGame(player1_ID, player2_ID);
 
         if(game is null)
             return base.BadRequest($"player1_ID: {player1_ID}, player2_ID: {player2_ID}");

@@ -18,29 +18,7 @@ namespace HappyTeam_BattleShips.Data
 		{
 			base.OnModelCreating(builder);
 
-			// Model id's mappings:
-		//     foreach (var entityType in builder.Model.GetEntityTypes())
-		//         foreach(var prop in entityType.ClrType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-		//             switch(prop.PropertyType.Name)
-		//             {
-		//                 case nameof(AchievementID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new AchievementID.EfCoreValueConverter()); break;
-		//                 case nameof(AchievementCategoryID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new AchievementCategoryID.EfCoreValueConverter()); break;
-		//                 case nameof(AreaID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new AreaID.EfCoreValueConverter()); break;
-		//                 case nameof(ChatID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new ChatID.EfCoreValueConverter()); break;
-		//                 case nameof(ChatParticipantSubID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new ChatParticipantSubID.EfCoreValueConverter()); break;
-		//                 case nameof(CommitteeID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new CommitteeID.EfCoreValueConverter()); break;
-		//                 case nameof(EmployeeID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new EmployeeID.EfCoreValueConverter()); break;
-		//                 case nameof(EmployeePositionID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new EmployeePositionID.EfCoreValueConverter()); break;
-		//                 case nameof(ProposalID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new ProposalID.EfCoreValueConverter()); break;
-		//                 case nameof(RatingID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new RatingID.EfCoreValueConverter()); break;
-		//                 case nameof(SummaryRatingID): builder.Entity(entityType.Name).Property(prop.Name).HasConversion(new SummaryRatingID.EfCoreValueConverter()); break;
-		//                 default: continue;
-		//             }
-			
-
 			builder.Entity<GamePlayer>()
-					// .Ignore(e => e.Game)
-					// .Ignore(e => e.Player)
 					.HasKey(e => new { e.SubID, e.Game_ID });
 			
 			builder.Entity<Game>()
@@ -59,11 +37,6 @@ namespace HappyTeam_BattleShips.Data
 			
 			builder.Entity<TileData>()
 					.HasKey(e => new { e.Game_ID, e.X, e.Y });
-			
-			// builder.Entity<AchievementCategory>() // AchievementCategory -< Achievement
-			// 		.HasMany<Achievement>(e => e.Achievements)
-			// 		.WithOne(e => e.Category)
-			// 		.HasForeignKey(e => e.Category_ID);
 		}
 	}
 }
