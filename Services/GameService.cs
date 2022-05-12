@@ -46,7 +46,7 @@ public class GameService : IGameService
                 });
         }
         List<TileData> board = Game.GenerateBoard();
-        for(int i = 0; i < newGame.BoardData.Count; i++)
+        for(int i = 0; i < board.Count; i++)
             board[i].Game_ID = newGame.ID;
         newGame.BoardData = board;
 

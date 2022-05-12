@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using HappyTeam_BattleShips.Services;
 
 
-HappyTeam_BattleShips.Models.Game.GenerateBoard();
-return;
 
 #region >>> builder config <<<
 var builder = WebApplication.CreateBuilder(args);
@@ -18,13 +16,12 @@ DependancyInjection.RegisterDependancies(builder);
 
 // Swagger:
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-     c.SwaggerDoc("v1", new OpenApiInfo {
-         Title = "PizzaStore API",
-         Description = "Making the Pizzas you love",
-         Version = "v1" });
-});
+builder.Services.AddSwaggerGen(c => {
+        c.SwaggerDoc("v1", new OpenApiInfo {
+            Title = "PizzaStore API",
+            Description = "Making the Pizzas you love",
+            Version = "v1" });
+    });
 
 builder.Services.AddControllersWithViews();
 #endregion >>> builder config <<<
