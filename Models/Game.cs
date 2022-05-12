@@ -66,6 +66,7 @@ public class Game
                     if(a && b && c)
                         return false;
                 }
+                    // This code is only left here if someone would like to tidy up this code, but bewared, below code is bugged.
                     // if(IsInbound((pos.x + x, pos.x + y)) && (x, y) != ignoreDirr && board[pos.x + x, pos.x + y] is not null)
                     //     return false;
             return true;
@@ -106,7 +107,6 @@ public class Game
                             };
                             x += dirr.x;
                             y += dirr.y;
-                            //AddedShipSizeToTileData
                         }
                         goto NEXT_SHIP;
                         TRY_AGAIN: ;
