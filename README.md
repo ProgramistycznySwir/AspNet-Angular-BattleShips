@@ -27,3 +27,12 @@ W czwartek wraz ze zbliżaniem się terminu jaki zadeklarowałem, jakość kodu 
 
 Na chwilę obecną API jest w głównej mierze skończone. Front-end podobnie, choć pozostawia wiele do życzenia. Można przeprowadzić rozgrywkę, ale system nie komunikuje w żaden sposób wygranej, oraz nawet tego, że przeciwnik dokonał ruchu (nie udało mi się jeszcze zaimplementować WebSocket'ów które są niezbędne do tego).
 Sama komunikacja z API REST'owym jest nie do zarzucenia (pomijając brak checków po stronie klient'a).
+
+# Funkcjonalności:
+- Użytkownik może strzorzyć nowe konto.
+- Użytkownik może "zalogować" się do już utworzonego konta jeśli posiada jego prywatne ID.
+- Aplikacja automatycznie przechowuje w danych przeglądarki prywatne ID użytkownika by ten nie musiał się "logować" więcej niż raz.
+- Zalogowany użytkownik może utworzyć rozgrywkę z dowolnym graczem po wprowadzeniu jego publicznego ID.
+- Zalogowany użytkownik może dołączyć do rozgrywek których jest członkiem.
+- Zalogowany użytkownik może dokonywać ruchów na planszy gry w której uczestniczy.
+- Po przeładowaniu strony aplikacja dostarcza zaktualizowany stan gry.
