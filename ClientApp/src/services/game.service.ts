@@ -28,10 +28,11 @@ export class GameService {
 
 
   public getGame(gameID: string, perspectiveID: string): Observable<Game> {
-    if(!AppSettings.UUID_REGEX.test(gameID))
-      throw Error("Invalid UUID")
-    if(!AppSettings.UUID_REGEX.test(perspectiveID))
-      throw Error("Invalid UUID")
+    //TODO: Reinstantiate error checks.
+    // if(!AppSettings.UUID_REGEX.test(gameID))
+    //   throw Error("Invalid UUID")
+    // if(!AppSettings.UUID_REGEX.test(perspectiveID))
+    //   throw Error("Invalid UUID")
       
     this._httpClient.get(`${environment.API_ENDPOINT}Game/${gameID}/${perspectiveID}`)
         .pipe(res => { console.info(res); return res})
@@ -57,5 +58,15 @@ export class GameService {
             res => this.game.next(res as Game),
             err => console.error(err)
           )
+  }
+  public makeMove(gameID: string, privateID: string, x: number, y: number) {
+    // TODO: Implement error checks.
+    return this._httpClient.post<TileData>(`${environment.API_ENDPOINT}Game/AddMove`, {
+        gameID: gameID,
+        playerID: privateID,
+        x: x,
+        y: y
+      })
+      .pipe(res => { console.info(res); return res})
   }
 }

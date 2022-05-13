@@ -1,3 +1,4 @@
+import { GamePlayer } from "./gamePlayer"
 import { Player } from "./player"
 import { TileData } from "./tileData"
 
@@ -8,7 +9,7 @@ export interface Game {
 	lastMove: Date
 
 	turn: number
-	players: Player[]
+	players: GamePlayer[]
 
 	isFinished: boolean
 	result: GameResult

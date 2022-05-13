@@ -68,6 +68,8 @@ public class GameService : IGameService
         var gamePlayer = game.Players.FirstOrDefault(player => player.Player_ID == playerID);
         if(gamePlayer is null)
             return null; // Couldn't find player with id {playerID}
+        if(gamePlayer.SubID != game.Turn)
+            return null; // Tried to make a move out of the order (gamePlayer.SubID: {gamePlayer.SubID}, game.Turn: {game.Turn})
 
         var tile = game.GetTile(x, y);
 
@@ -79,6 +81,8 @@ public class GameService : IGameService
             return null; // Requested tile ({x}, {y}) is your own ship
         else 
             tile.IsHit = true;
+
+        game.IncrementPlayerTurn();
 
         //TODO: Implement notifying other players via WebSockets.
         _context.SaveChanges();

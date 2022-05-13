@@ -1,1 +1,33 @@
-Hello from GameComponent
+<div *ngIf="game; else LoadingGame">
+  <table *ngIf="gameBoard">
+    <tr>
+      <td class="boardTile">X</td>
+      <td class="boardTile" *ngFor="let num of labels">
+        {{num+1}}
+      </td>
+    </tr>
+    <tr *ngFor="let row of gameBoard; let y = index">
+      <td class="boardTile">{{y+1}}</td>
+      <td class="boardTile" *ngFor="let item of row; let x = index">
+        <div *ngIf="item; else ClearSea">
+          <button mat-button color="primary" disabled>
+            <div *ngIf="item.isMiss">M</div>
+            <div class="HitTile" *ngIf="item.isHit">H</div>
+            <div [ngClass]="{enemyTile: !checkIfPlayerSubID(item.player_SubID),
+                            playerTile: checkIfPlayerSubID(item.player_SubID)}">
+              {{item.player_SubID}}
+            </div>
+          </button>
+        </div>
+        <ng-template #ClearSea>
+          <button mat-button color="primary" (click)="onMakeMove(x, y)">
+            ~
+          </button>
+        </ng-template>
+      </td>
+    </tr>
+  </table>
+</div>
+<ng-template #LoadingGame>
+  Loading game...
+</ng-template>

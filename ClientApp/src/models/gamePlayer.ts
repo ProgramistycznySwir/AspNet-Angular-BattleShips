@@ -4,8 +4,8 @@ import { TileData } from "./tileData"
 export interface GamePlayer {
 
 	subID: number,
-	game_ID: number,
-	player_ID: number
+	game_ID: string,
+	player_ID: string
 
 	/*
     public class GamePlayer

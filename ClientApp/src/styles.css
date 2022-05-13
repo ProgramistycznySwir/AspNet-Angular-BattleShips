@@ -29,3 +29,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border: solid;
   border-color: #333; */
 }
+
+.boardTile {
+  width: 4rem;
+  height: 4rem;
+  outline: 3px dashed cornflowerblue;
+
+  justify-content: center;
+}
+
+.enemyTile {
+  color: red
+}
+.playerTile {
+  color: limegreen
+}
+.HitTile {
+  color: orange
+}

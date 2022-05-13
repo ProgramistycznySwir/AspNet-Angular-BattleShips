@@ -1,7 +1,10 @@
 export interface TileData {
 	x: number
 	y: number
-	state: TileState
+	isMiss: boolean
+	isHit: boolean
+	player_SubID: number
+	shipSize: number
 }
 
 export enum  TileState {

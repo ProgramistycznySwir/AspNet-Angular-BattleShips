@@ -51,24 +51,6 @@ export class PlayerService {
     return this._player
   }
 
-  public setPlayerID(id: string): void {
-    if(!AppSettings.UUID_REGEX.test(id)) {
-      console.error("Invalid UUID", id)
-      return;
-    }
-    if(this._isWaiting) {
-      console.warn("Already waiting for response from server!")
-      return;
-    }
-    let request = this._httpClient.get<Player>(`${environment.API_ENDPOINT}Player/${id}`)
-        .pipe(res => { console.info(res); return res})
-        .pipe(res => { this._isWaiting = false; return res})
-        .subscribe(
-          res => { this._player.next(res as Player); this.playerIDFromCookie= res.id; this._cookieService.set(this.COOKIE_NAME, res.id)},
-          err => console.error(err)
-        )
-    this._isWaiting = true;
-  }
   // For fetching data about player with ID.
   private fetchPlayer(): void  {
     // if(this.player) {
