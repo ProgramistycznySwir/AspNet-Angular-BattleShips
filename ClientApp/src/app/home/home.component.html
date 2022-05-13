@@ -12,11 +12,11 @@
     <hr />
     <div>
       <form [formGroup]='createGame_formGroup' (ngSubmit)='onCreateGame()' style="display: flex; flex-direction: row;">
-        <button mat-raised-button color="primary" [disabled]="isWaitingForPlayerData">
+        <button mat-raised-button color="primary" [disabled]="createGame_formGroup.invalid">
           Create new game
         </button>
-        <mat-form-field style="font-size: medium; flex-grow: 1">
-          <mat-label>with</mat-label>
+        <mat-form-field style="font-size: medium; flex-grow: 1; margin-left: 1rem;">
+          <mat-label>Opponent's PublicID</mat-label>
           <input matInput formControlName="otherPlayerID">
           <mat-error *ngIf="createGame_formGroup.get('otherPlayerID')?.hasError('invalidUUID') && createGame_formGroup.get('otherPlayerID')?.value">[Invalid UUID]</mat-error>
         </mat-form-field>
