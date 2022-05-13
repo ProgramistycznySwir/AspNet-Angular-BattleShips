@@ -1,4 +1,5 @@
 # Happy Team - BattleShips
+## Opis przebiegu wykonywania projektu:
 Na początku wybrałem techstack: ASP.NET + Angular + SQLite.
 Z bazą postanowiłem łączyć się przy pomocy Entity Framework Code First, a komunikację serwer-klient postanowiłem zrealizować przy pomocy WebSocket'ów.
 WebSockety są dla mnie nową technologią, więc musiałem najpierw się ich nauczyć.
@@ -26,3 +27,5 @@ W czwartek wraz ze zbliżaniem się terminu jaki sobie wyznaczyłem jakość kod
 
 Na chwilę obecną API jest w głównej mierze skończone. Front-end podobnie, choć pozostawia wiele do życzenia. Można przeprowadzić rozgrywkę, ale system nie komunikuje w żaden sposób wygranej, oraz nawet tego, że przeciwnik dokonał ruchu (nie udało mi się jeszcze zaimplementować WebSocket'ów które są niezbędne do tego).
 Sama komunikacja z API REST'owym jest nie do zarzucenia (pomijając brak checków po stronie klient'a).
+
+## Ogólna dokumentacja:

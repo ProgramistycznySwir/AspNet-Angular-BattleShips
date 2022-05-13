@@ -27,7 +27,8 @@ export class HomeComponent {
         playerID: new FormControl('', [Validators.required, UUID_Validator()]),
       })
     this.createGame_formGroup = new FormGroup({
-      otherPlayerID: new FormControl('', [UUID_Validator()]),
+      //TODO: Remove this Validators.required validator in final app.
+      otherPlayerID: new FormControl('', [Validators.required, UUID_Validator()]),
     })
   }
 
