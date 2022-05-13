@@ -18,14 +18,12 @@ W środę zaczęło mi się mocno rzucać w oczy, że przeszacowałem siły nad 
 
 Sądzę, że powinienem jednak dokonać większego rozdzielenia domeny, chociażby po to, że otrzymałbym za darmo wycięcie obiektów z modeli kiedy chciałbym je wysyłać jeśli bym skorzystał z AutoMapper'a.
 
-Error checki są w projekcie zaimplementowane na odwal (serwer sprawdza wszystkie możliwe błędy, ale w razie wykrycia jakiegoś, nie pisze żadnych informacji odnośnie jaki błąd wykrył). Jeśli będę miał czas to postaram się to poprawić.
+TODO: Error checki są w projekcie zaimplementowane na odwal (serwer sprawdza wszystkie możliwe błędy, ale w razie wykrycia jakiegoś, nie pisze żadnych informacji odnośnie jaki błąd wykrył). Jeśli będę miał czas to postaram się to poprawić.
 
 TODO: Zauważyłem, że w kodzie jednego serwisu piszę kod innego serwisu (aka. wyszukuje graczy w GameService, zamiast skorzystać z już gotowych metod serwisu PlayerService). Warto to skorygować, by kod był DRY.
 
 
-W czwartek wraz ze zbliżaniem się terminu jaki sobie wyznaczyłem jakość kodu front-end'owego zaczęła tracić na jakości kiedy próbowałem sprawić by projekt w jakimkolwiek stanie działał zostawiając tylko po sobie TODO.
+W czwartek wraz ze zbliżaniem się terminu jaki zadeklarowałem, jakość kodu front-end'owego zaczęła tracić na jakości kiedy próbowałem sprawić by projekt w jakimkolwiek stanie działał zostawiając tylko po sobie komentarze z TODO.
 
 Na chwilę obecną API jest w głównej mierze skończone. Front-end podobnie, choć pozostawia wiele do życzenia. Można przeprowadzić rozgrywkę, ale system nie komunikuje w żaden sposób wygranej, oraz nawet tego, że przeciwnik dokonał ruchu (nie udało mi się jeszcze zaimplementować WebSocket'ów które są niezbędne do tego).
 Sama komunikacja z API REST'owym jest nie do zarzucenia (pomijając brak checków po stronie klient'a).
-
-## Ogólna dokumentacja:
