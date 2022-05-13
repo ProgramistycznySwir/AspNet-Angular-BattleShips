@@ -2,8 +2,17 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false
+import { AppSettings } from "src/AppSettings";
+
+// const BACK_END_URL: string = '127.0.0.1:7168/';
+const BACK_END_URL: string =  'echo.websocket.org/';
+
+export const environment: any = {
+  production: false,
+
+	BACK_END_URL: BACK_END_URL,
+	API_ENDPOINT: `https://${BACK_END_URL}api/`,
+  WEBSOCKET_URL: `ws://${BACK_END_URL}`
 };
 
 /*

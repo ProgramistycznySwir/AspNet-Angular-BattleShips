@@ -102,8 +102,6 @@ public class GameService : IGameService
         return game.GetSanitised();
 	}
 
-	// private TileData AddMove(Game game, )
-
 	public Game GetGame(Guid id)
         => _context.Games.Where(e => e.ID == id)
                 .Include(e => e.BoardData)
