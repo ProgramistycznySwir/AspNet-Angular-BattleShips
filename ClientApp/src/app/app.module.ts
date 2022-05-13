@@ -16,6 +16,7 @@ import { GameService } from 'src/services/game.service';
 import { PlayerService } from 'src/services/player.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GameComponent } from './game/game.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { GameComponent } from './game/game.component';
 
     MatButtonModule,
     MatInputModule,
+    MatDialogModule,
   ],
   providers: [
     CookieService,

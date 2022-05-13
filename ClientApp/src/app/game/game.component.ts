@@ -7,6 +7,7 @@ import { TileData } from 'src/models/tileData';
 import { UUID_Validator } from 'src/models/uuidValidator';
 import { GameService } from 'src/services/game.service';
 import { PlayerService } from 'src/services/player.service';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-game',
@@ -30,7 +31,7 @@ export class GameComponent {
   private _row_label: number = -1
   get row_label(): number { this._row_label+=1; return this._row_label; }
 
-  constructor(private _activatedRoute: ActivatedRoute, private _gameService: GameService, private _playerService: PlayerService) {
+  constructor(private _activatedRoute: ActivatedRoute, private _gameService: GameService, private _playerService: PlayerService, public _dialog: MatDialog) {
     _playerService.player.subscribe(next => this.player = next)
     this._activatedRoute.paramMap.subscribe(params => {
         this.gameID = params.get('id')! ?? null;
@@ -73,7 +74,8 @@ export class GameComponent {
 
   public onMakeMove(x: number, y: number) {
     this._gameService.makeMove(this.game.id, this.player.id, x, y)
-        .subscribe(tile => this.addTileToBoard(tile))
+        .subscribe(tile => this.addTileToBoard(tile),
+            err => this.openDialog())
     // console.log(x, y)
   }
 
@@ -85,4 +87,20 @@ export class GameComponent {
     else
       console.error(tile)
   }
+
+  openDialog() {
+    const dialogRef = this._dialog.open(DialogContent_ExplainToUser);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
+
+
+@Component({
+  selector: 'dialog-content-explain-to-user',
+  template: `You're not allowed to make this action. App is still in development! It's probably not your turn, or
+      you're trying to make invalid move. Eitherway, restarting site may help!`,
+})
+export class DialogContent_ExplainToUser {}
