@@ -27,9 +27,6 @@ export class GameComponent {
   }
 
   get labels(): number[] { return Array(10).fill(0).map((_, i) => i); }
-  //TODO: Fix below code as it's really hacky.
-  private _row_label: number = -1
-  get row_label(): number { this._row_label+=1; return this._row_label; }
 
   constructor(private _activatedRoute: ActivatedRoute, private _gameService: GameService, private _playerService: PlayerService, public _dialog: MatDialog) {
     _playerService.player.subscribe(next => this.player = next)
@@ -76,7 +73,6 @@ export class GameComponent {
     this._gameService.makeMove(this.game.id, this.player.id, x, y)
         .subscribe(tile => this.addTileToBoard(tile),
             err => this.openDialog())
-    // console.log(x, y)
   }
 
   private addTileToBoard(tile: TileData) {

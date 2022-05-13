@@ -26,8 +26,6 @@
       <div *ngFor="let game of player.games" style="display: flex; flex-direction: column;">
         <div>
           {{game.game_ID}}
-          <!-- <a class="notALink" [routerLink]="['/game', game.game_ID]">
-          </a> -->
           <button mat-raised-button color="primary" [routerLink]="['/game', game.game_ID]">Join</button>
         </div>
       </div>
