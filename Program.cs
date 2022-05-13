@@ -12,6 +12,17 @@ var builder = WebApplication.CreateBuilder(args);
 // DB:
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Filename=HappyTeam-BattleShips.db"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+        });
+});
+
 DependancyInjection.RegisterDependancies(builder);
 
 // Swagger:
@@ -47,6 +58,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseCors();
 
 app.UseWebSockets(new WebSocketOptions {
         KeepAliveInterval = TimeSpan.FromMinutes(2)

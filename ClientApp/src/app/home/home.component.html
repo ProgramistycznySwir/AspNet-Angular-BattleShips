@@ -1,12 +1,57 @@
-<h1 *ngIf="haveAccount == false">
-  You're not logged in!
-  <button mat-raised-button color="primary" [disabled]="isWaitingForPlayerData" (click)= createAccount()>
-    Create new account
-  </button>
-</h1>
-<h1 *ngIf="haveAccount == true">
-  You're logged in as: {{ player.publicID }}
-</h1>
+<div *ngIf="haveAccount; else NotLoggedIn">
+  <div *ngIf="player">
+    <h1>
+      You're logged in as: {{ player.publicID }}
+    </h1>
+    <br />
+    <button mat-raised-button color="primary" (click)="toggleRevealPublicID()">
+      Show
+    </button>
+    <div *ngIf="isPrivateIDRevealed">Your PrivateID: {{player.id}} </div>
+    don't show it to anyone, save it somewhere if you would like to log into this account form different device.
+    <hr />
+    <div>
+      <form [formGroup]='createGame_formGroup' (ngSubmit)='onCreateGame()' style="display: flex; flex-direction: row;">
+        <button mat-raised-button color="primary" [disabled]="isWaitingForPlayerData">
+          Create new game
+        </button>
+        <mat-form-field style="font-size: medium; flex-grow: 1">
+          <mat-label>with</mat-label>
+          <input matInput formControlName="otherPlayerID">
+          <mat-error *ngIf="createGame_formGroup.get('otherPlayerID')?.hasError('invalidUUID') && createGame_formGroup.get('otherPlayerID')?.value">[Invalid UUID]</mat-error>
+        </mat-form-field>
+      </form>
+      <h1> Your games:</h1>
+      <div *ngIf="!player.games">Empty...</div>
+      <div *ngFor="let game of player.games">
+        {{game.id}}
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #NotLoggedIn>
+  <h1>
+    You're not logged in!
+    <hr />
+    <button mat-raised-button color="primary" [disabled]="isWaitingForPlayerData" (click)= createAccount()>
+      Create new account
+    </button>
+    <br />
+    or
+    <br />
+    <form [formGroup]='logIn_formGroup' (ngSubmit)='onLogIn()' style="display: flex; flex-direction: row;">
+      <button mat-raised-button color="primary" [disabled]="isWaitingForPlayerData">
+        Use your id to "log in"
+      </button>
+      <mat-form-field style="font-size: medium; flex-grow: 1">
+        <mat-label>PlayerUUID</mat-label>
+        <input matInput formControlName="playerID">
+        <mat-error *ngIf="logIn_formGroup.get('playerID')?.hasError('required')">[UUID Required]</mat-error>
+        <mat-error *ngIf="logIn_formGroup.get('playerID')?.hasError('invalidUUID') && logIn_formGroup.get('playerID')?.value">[Invalid UUID]</mat-error>
+      </mat-form-field>
+    </form>
+  </h1>
+</ng-template>
 <!-- <p>Welcome to your new single-page application, built with:</p>
 <ul>
   <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>

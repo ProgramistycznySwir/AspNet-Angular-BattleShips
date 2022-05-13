@@ -23,7 +23,7 @@ public class PlayerController : ControllerBase
         var player = _playerService.GetPlayer(id: id);
         if(player is null)
             return base.NotFound(id);
-        return base.Ok(player);
+        return base.Ok(player.GetSanitised_RemainID());
     }
     [HttpGet("/OtherPlayer/{publicID}")]
     public ActionResult<Player> GetOtherPlayer([FromRoute] Guid publicID)
@@ -31,8 +31,9 @@ public class PlayerController : ControllerBase
         var player = _playerService.GetPlayerByPublicID(publicID: publicID);
         if(player is null)
             return base.NotFound(publicID);
-        return base.Ok(player);
+        return base.Ok(player.GetSanitised());
     }
+    //TODO: Currently games are fetched through this controller, but to be RESTful games should be fetched with different query from GameController.
     [HttpPost]
     public ActionResult<Player> PostNewPlayer()
     {

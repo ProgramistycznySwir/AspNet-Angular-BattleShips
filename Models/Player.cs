@@ -28,5 +28,14 @@ public static class Player_Ext
                 PublicID = self.PublicID,
                 CreationTime = self.CreationTime,
                 LastUsedTime = self.LastUsedTime,
+                Games= self.Games.Select(game => game.GetSanitised()).ToList(),
+            };
+    public static Player GetSanitised_RemainID(this Player self)
+        => new Player {
+                ID = self.ID,
+                PublicID = self.PublicID,
+                CreationTime = self.CreationTime,
+                LastUsedTime = self.LastUsedTime,
+                Games= self.Games.Select(game => game.GetSanitised()).ToList(),
             };
 }

@@ -1,6 +1,7 @@
 using HappyTeam_BattleShips.Data;
 using HappyTeam_BattleShips.Models;
 using HappyTeam_BattleShips.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace HappyTeam_BattleShips.Services;
 
@@ -27,10 +28,12 @@ public class PlayerService : IPlayerService
     }
 
     public Player GetPlayer(Guid id)
-        => _context.Players.Find(id);
+        => _context.Players.Where(e => e.ID == id)
+                .Include(e => e.Games)
+                .FirstOrDefault()!;
 
     public Player GetPlayerByPublicID(Guid publicID)
         => _context.Players
                 .FirstOrDefault(player => player.PublicID.Equals(publicID))
-                ?.GetSanitised();
+                ?.GetSanitised()!;
 }

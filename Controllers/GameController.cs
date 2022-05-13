@@ -35,20 +35,24 @@ public class GameController : ControllerBase
         return base.Ok(game.GetSanitised());
     }
     [HttpPost("AddMove")]
-    public ActionResult<TileData> AddMove(Guid gameID, Guid playerID, int x, int y)
+    public ActionResult<TileData> AddMove([FromBody] AddMoveParams @params)
     {
-        var tile = _gameService.AddMove(gameID, playerID, x, y);
+        var tile = _gameService.AddMove(@params.gameID, @params.playerID, @params.x, @params.y);
         if(tile is null)
-            return base.BadRequest($"gameID: {gameID}, playerID: {playerID}, pos: (${x}, ${y})");
+            return base.BadRequest($"gameID: {@params.gameID}, playerID: {@params.playerID}, pos: (${@params.x}, ${@params.y})");
         return base.Ok(tile.GetSanitised());
     }
+    //TODO: To jest tak wbrew filozofi HTTP...
+    public record AddMoveParams(Guid gameID, Guid playerID, int x, int y);
     [HttpPost("CreateGame")]
-    public ActionResult<Game> CreateGame(Guid player1_ID, Guid? player2_ID = null)
+    // public ActionResult<Game> CreateGame([FromBody] Guid player1_ID, [FromBody] Guid? player2_ID = null)
+    public ActionResult<Game> CreateGame([FromBody] CreateGameParams @params)
     {
-        Game game = _gameService.AddGame(player1_ID, player2_ID);
+        Game game = _gameService.AddGame(@params.player1_ID, @params.player2_ID);
 
         if(game is null)
-            return base.BadRequest($"player1_ID: {player1_ID}, player2_ID: {player2_ID}");
+            return base.BadRequest($"player1_ID: {@params.player1_ID}, player2_ID: {@params.player2_ID}");
         return base.Ok(game.GetSanitised());
     }
+    public record CreateGameParams(Guid player1_ID, Guid? player2_ID);
 }
