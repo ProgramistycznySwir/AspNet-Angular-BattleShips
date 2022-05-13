@@ -73,8 +73,10 @@ public class GameService : IGameService
 
         var tile = game.GetTile(x, y);
 
-        if(tile is null)
+        if(tile is null) {
             game.BoardData.Add(tile = new TileData { Game_ID = game.ID, X= (byte)x, Y= (byte)y, IsMiss = true, Player_SubID = gamePlayer.SubID });
+            game.IncrementPlayerTurn();
+        }
         else if(tile.IsMiss)
             return null; // Requested tile ({x}, {y}) is already miss
         else if(tile.Player_SubID == gamePlayer.SubID)
@@ -82,7 +84,6 @@ public class GameService : IGameService
         else 
             tile.IsHit = true;
 
-        game.IncrementPlayerTurn();
 
         //TODO: Implement notifying other players via WebSockets.
         _context.SaveChanges();
