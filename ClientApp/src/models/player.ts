@@ -1,10 +1,11 @@
 import { Game } from "./game"
+import { GamePlayer } from "./gamePlayer"
 
 export interface Player {
 	id: string
 	publicID: string
 
-	games: Game[]
+	games: GamePlayer[]
 	/*
     [Key]
     public PlayerID ID { get; set; }
