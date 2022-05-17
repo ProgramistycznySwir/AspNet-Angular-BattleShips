@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace HappyTeam_BattleShips.Controllers;
 
-public class WebSocketController : Hub
+public class WebSocketHub : Hub
 {
 	static readonly Dictionary<Guid, string> ConnectedUsers = new();
 

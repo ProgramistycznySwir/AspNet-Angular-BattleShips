@@ -1,3 +1,4 @@
+using HappyTeam_BattleShips.Controllers;
 using HappyTeam_BattleShips.Data;
 using HappyTeam_BattleShips.Models;
 using HappyTeam_BattleShips.Services.Interfaces;
@@ -8,10 +9,12 @@ namespace HappyTeam_BattleShips.Services;
 public class GameService : IGameService
 {
 	private readonly AppDbContext _context;
+	private readonly WebSocketHub _webSockets;
 
-    public GameService(AppDbContext context)
+	public GameService(AppDbContext context, WebSocketHub webSockets)
     {
         _context = context;
+        _webSockets = webSockets;
     }
 
     public Game AddGame(Guid publicID1, Guid? publicID2= null)
@@ -86,8 +89,10 @@ public class GameService : IGameService
         _context.SaveChanges();
 
         //TODO: Implement notifying other players via WebSockets.
-        
 
+        foreach(var player in game.Players.Where(player => player.Player_ID != gamePlayer.Player_ID))
+            _webSockets.UpdateTileData(player.Player_ID, tile);
+        
         return tile;
     }
 

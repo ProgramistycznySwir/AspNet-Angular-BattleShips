@@ -82,7 +82,7 @@ export class PlayerService {
         .pipe(res => { this._isWaiting = false; return res})
         .subscribe(
           res =>  { this._player.next(res as unknown as Player); this.playerIDFromCookie= (res as any).id; this._cookieService.set(this.COOKIE_NAME, (res as any).id); console.log(res) },
-          err => console.error(err)
+          err => { console.error(err); this._isWaiting = false }
         )
     this._isWaiting = true;
   }

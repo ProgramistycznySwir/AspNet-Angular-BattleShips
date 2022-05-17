@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Player } from 'src/models/player';
 import { UUID_Validator } from 'src/models/uuidValidator';
 import { GameService } from 'src/services/game.service';

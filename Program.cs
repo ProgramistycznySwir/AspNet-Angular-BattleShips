@@ -2,6 +2,7 @@ using HappyTeam_BattleShips.Data;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using HappyTeam_BattleShips.Services;
+using HappyTeam_BattleShips.Controllers;
 
 
 
@@ -12,16 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 // DB:
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Filename=HappyTeam-BattleShips.db"));
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-        });
-});
+builder.Services.AddCors(options => {
+        options.AddDefaultPolicy(
+            builder => {
+                builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            });
+    });
+builder.Services.AddSignalR();
 
 DependancyInjection.RegisterDependancies(builder);
 
@@ -61,8 +61,12 @@ app.UseRouting();
 
 app.UseCors();
 
+
 app.UseWebSockets(new WebSocketOptions {
         KeepAliveInterval = TimeSpan.FromMinutes(2)
+    });
+app.UseEndpoints(endpoints => {
+        endpoints.MapHub<WebSocketHub>("/hub/game");
     });
 // app.Run(async (context) =>
 // {
