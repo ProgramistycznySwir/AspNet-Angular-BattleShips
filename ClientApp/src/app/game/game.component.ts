@@ -22,8 +22,7 @@ export class GameComponent {
 
   gameBoard!: TileData[][]
 
-  private _isWaitingForMoveResult: boolean = false
-  get isWaitingForMoveResult(): boolean { return this._isWaitingForMoveResult }
+  get isWaitingForMoveResult(): boolean { return this._gameService.isWaitingForMoveResult }
 
   public checkIfPlayerSubID(id: number) {
     return this.playerSubID == id
@@ -79,7 +78,6 @@ export class GameComponent {
 
   public onMakeMove(x: number, y: number) {
     if(this.isWaitingForMoveResult == false) {
-      this._isWaitingForMoveResult = true
       this._gameService.makeMove(this.game.id, this.player.id, x, y)
     }
   }

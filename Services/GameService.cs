@@ -149,8 +149,11 @@ public class GameService : IGameService
         if(game is null)
             return null; // Couldn't find game with id {gameID}
         lastUpdate = lastUpdate.AddTicks(-lastUpdate.Ticks % TimeSpan.TicksPerMillisecond);
+        lastUpdate = lastUpdate.ToUniversalTime();
+        // lastUpdate = lastUpdate.AddTicks(100000000);
         var lastMove_ = game.LastMove.AddTicks(-game.LastMove.Ticks % TimeSpan.TicksPerMillisecond);
-        if(lastMove_ <= lastUpdate)
+        lastMove_ = lastMove_.ToUniversalTime();
+        if(lastUpdate >= lastMove_)
             return null; // OK: There is no updates to fetch
         //TODO: Add timestamps to TileData soo only the moves made after lastUpdate would be sent.
 

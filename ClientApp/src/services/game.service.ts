@@ -60,9 +60,12 @@ export class GameService {
             err => console.error(err)
           )
   }
+  
+  private _isWaitingForMoveResult: boolean = false
+  get isWaitingForMoveResult(): boolean { return this._isWaitingForMoveResult }
   public makeMove(gameID: string, privateID: string, x: number, y: number) {
     // TODO: Implement error checks.
-    console.log("Sending!!!")
+    this._isWaitingForMoveResult = true;
     let request = this._httpClient.post<TileData>(`${environment.API_ENDPOINT}Game/AddMove`, {
         gameID: gameID,
         playerID: privateID,
@@ -70,7 +73,8 @@ export class GameService {
         y: y
       })
           .pipe(res => { console.info(res); return res})
-          .subscribe(res => this.addTile(res))
+          .subscribe(res => { this.addTile(res); this._isWaitingForMoveResult= false})
+    // return request
   }
   private addTile(tile: TileData) {
     let game = Object.create(this.game.getValue()) as Game
