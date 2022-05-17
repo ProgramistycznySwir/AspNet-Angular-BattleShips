@@ -29,7 +29,7 @@
           </button>
         </div>
         <ng-template #ClearSea>
-          <button mat-button color="primary" (click)="onMakeMove(x, y)">
+          <button mat-button color="primary" [disabled]="!checkIfPlayerSubID(game.turn)" (click)="onMakeMove(x, y)">
             ~
           </button>
         </ng-template>

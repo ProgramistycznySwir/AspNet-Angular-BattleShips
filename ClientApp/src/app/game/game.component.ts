@@ -22,6 +22,9 @@ export class GameComponent {
 
   gameBoard!: TileData[][]
 
+  private _isWaitingForMoveResult: boolean = false
+  get isWaitingForMoveResult(): boolean { return this._isWaitingForMoveResult }
+
   public checkIfPlayerSubID(id: number) {
     return this.playerSubID == id
   }
@@ -30,10 +33,13 @@ export class GameComponent {
 
   constructor(private _activatedRoute: ActivatedRoute, private _gameService: GameService, private _playerService: PlayerService, public _dialog: MatDialog) {
     _playerService.player.subscribe(next => this.player = next)
+    // _gameService.game.subscribe(next => this.game = next)
     this._activatedRoute.paramMap.subscribe(params => {
         this.gameID = params.get('id')! ?? null;
         this.fetchGame()
       });
+    
+    _gameService.tiles.subscribe(next => this.recalculateBoard(next))
   }
 
   private isAlreadyFetchingPlayer: boolean = false
@@ -45,7 +51,6 @@ export class GameComponent {
             this.game = next;
             if(this.game) {
               this.playerSubID = this.game.players.find(e => e.player_ID == this.player.publicID)!.subID
-              this.gameBoard = this.convertTileDataTo2DArray(this.game.boardData)
             }
           })
     }
@@ -68,20 +73,27 @@ export class GameComponent {
     }
     return result
   }
-
-  public onMakeMove(x: number, y: number) {
-    this._gameService.makeMove(this.game.id, this.player.id, x, y)
-        .subscribe(tile => this.addTileToBoard(tile),
-            err => this.openDialog())
+  private recalculateBoard(tileData: TileData[]): void {
+    if(tileData)
+      this.gameBoard = this.convertTileDataTo2DArray(tileData)
   }
 
-  private addTileToBoard(tile: TileData) {
-    if(tile) {
-      this.gameBoard[tile.y][tile.x] = tile
-      this.game.boardData.push(tile)
+  public onMakeMove(x: number, y: number) {
+    if(this.isWaitingForMoveResult == false) {
+      this._isWaitingForMoveResult = true
+      this._gameService.makeMove(this.game.id, this.player.id, x, y)
+          // .subscribe(tile => this._isWaitingForMoveResult = false,
+          //     err => this.openDialog())
     }
-    else
-      console.error(tile)
+  }
+
+
+  private addTileToBoard(tile: TileData) {
+    // if(tile) {
+    //   // this.game.boardData.push(tile)
+    // }
+    // else
+    //   console.error(tile)
   }
 
   openDialog() {

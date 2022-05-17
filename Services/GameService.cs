@@ -64,7 +64,6 @@ public class GameService : IGameService
         var game = GetGame(gameID);
         if(game is null)
             return null; // Couldn't find game with id {gameID}
-
         var gamePlayer = game.Players.FirstOrDefault(player => player.Player_ID == playerID);
         if(gamePlayer is null)
             return null; // Couldn't find player with id {playerID}

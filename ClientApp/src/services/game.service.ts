@@ -12,6 +12,7 @@ import { TileData } from 'src/models/tileData';
 })
 export class GameService {
 
+  // games: BehaviorSubject<Game[]> = new BehaviorSubject<Game[]>(null!)
   game: BehaviorSubject<Game> = new BehaviorSubject<Game>(null!)
   tiles: BehaviorSubject<TileData[]> = new BehaviorSubject<TileData[]>(null!)
 
@@ -23,6 +24,7 @@ export class GameService {
     //       let data = JSON.parse(res.data)
     //       return data
     //     })
+    this.game.subscribe(next => this.tiles.next(next?.boardData))
   }
 
 
@@ -33,7 +35,7 @@ export class GameService {
     //   throw Error("Invalid UUID")
     // if(!AppSettings.UUID_REGEX.test(perspectiveID))
     //   throw Error("Invalid UUID")
-      
+    
     this._httpClient.get(`${environment.API_ENDPOINT}Game/${gameID}/${perspectiveID}`)
         .pipe(res => { console.info(res); return res})
         .subscribe(
@@ -61,12 +63,30 @@ export class GameService {
   }
   public makeMove(gameID: string, privateID: string, x: number, y: number) {
     // TODO: Implement error checks.
-    return this._httpClient.post<TileData>(`${environment.API_ENDPOINT}Game/AddMove`, {
+    console.log("Sending!!!")
+    let request = this._httpClient.post<TileData>(`${environment.API_ENDPOINT}Game/AddMove`, {
         gameID: gameID,
         playerID: privateID,
         x: x,
         y: y
       })
-      .pipe(res => { console.info(res); return res})
+          .pipe(res => { console.info(res); return res})
+          .subscribe(res => {
+            let game = Object.create(this.game.getValue()) as Game
+            game.turn = (game.turn + (res.isHit ? 0 : 1)) % game.players.length
+            game.boardData = [...this.tiles.getValue(), res]
+            this.game.next(
+              game
+            //   {
+            //   id: game.id,
+            //   creationTime: game.creationTime,
+            //   lastMove: game.lastMove,
+            //   turn: (game.turn + res.isHit ? 1 : 0) % game.players.length,
+            //   players: game.players,
+            //   isFinished: game.isFinished,
+            //   result: 
+            // }
+            ) } )
+    // return requests
   }
 }
