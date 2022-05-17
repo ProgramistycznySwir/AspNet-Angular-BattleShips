@@ -9,7 +9,6 @@ public static class DependancyInjection
     {
         builder.Services.AddScoped<IPlayerService, PlayerService>();
         builder.Services.AddScoped<IGameService, GameService>();
-        // builder.Services.AddScoped<ICommunicationService, >();
-        builder.Services.AddSingleton<WebSocketHub>();
+        // builder.Services.AddSingleton<WebSocketHub>();
     }
 }

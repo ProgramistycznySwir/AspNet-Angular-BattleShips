@@ -19,11 +19,11 @@ export class WebSocketService {
 
 
   constructor(private _playerService: PlayerService) { 
-    this.connection.onclose(async () => {
-      await this.start();
-    });
-    this.connection.on("updateTileData", (data: TileData) => this.tileDataUpdates.next(data));
-    this.start();
+    // this.connection.onclose(async () => {
+    //   await this.start();
+    // });
+    // this.connection.on("updateTileData", (data: TileData) => this.tileDataUpdates.next(data));
+    // this.start();
   }
 
   public async start() {

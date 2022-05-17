@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Player } from 'src/models/player';
 import { CookieService } from 'ngx-cookie-service';
@@ -22,7 +22,7 @@ export class PlayerService {
   private readonly COOKIE_NAME: string = "BattleShips-PlayerID"
   private playerIDFromCookie: string
   private _player: BehaviorSubject<Player> = new BehaviorSubject<Player>(null!)
-  get player(): Observable<Player> { return this._player as Observable<Player> }
+  get player(): BehaviorSubject<Player> { return this._player as BehaviorSubject<Player> }
 
   private _isWaiting: boolean = false
   get isWaiting(): boolean { return this._isWaiting; }

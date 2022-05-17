@@ -9,12 +9,13 @@ namespace HappyTeam_BattleShips.Services;
 public class GameService : IGameService
 {
 	private readonly AppDbContext _context;
-	private readonly WebSocketHub _webSockets;
+	// private readonly WebSocketHub _wsebSockets;
 
-	public GameService(AppDbContext context, WebSocketHub webSockets)
+	// public GameService(AppDbContext context, WebSocketHub webSockets)
+	public GameService(AppDbContext context)
     {
         _context = context;
-        _webSockets = webSockets;
+        // _webSockets = webSockets;
     }
 
     public Game AddGame(Guid publicID1, Guid? publicID2= null)
@@ -86,12 +87,14 @@ public class GameService : IGameService
         else 
             tile.IsHit = true;
 
+        game.LastMove = DateTime.Now;
+
         _context.SaveChanges();
 
         //TODO: Implement notifying other players via WebSockets.
 
-        foreach(var player in game.Players.Where(player => player.Player_ID != gamePlayer.Player_ID))
-            _webSockets.UpdateTileData(player.Player_ID, tile);
+        // foreach(var player in game.Players.Where(player => player.Player_ID != gamePlayer.Player_ID))
+        //     _webSockets.UpdateTileData(player.Player_ID, tile);
         
         return tile;
     }
@@ -139,4 +142,23 @@ public class GameService : IGameService
                 .ToList();
         return game;
     }
+
+	public TileDataUpdateDTO CheckGameUpdate(Guid gameID, Guid playerID, DateTime lastUpdate)
+	{
+        var game = _context.Games.Find(gameID);
+        if(game is null)
+            return null; // Couldn't find game with id {gameID}
+        lastUpdate = lastUpdate.AddTicks(-lastUpdate.Ticks % TimeSpan.TicksPerMillisecond);
+        var lastMove_ = game.LastMove.AddTicks(-game.LastMove.Ticks % TimeSpan.TicksPerMillisecond);
+        if(lastMove_ <= lastUpdate)
+            return null; // OK: There is no updates to fetch
+        //TODO: Add timestamps to TileData soo only the moves made after lastUpdate would be sent.
+
+        var result = new TileDataUpdateDTO {
+            Tiles= GetGameFromPerspective(gameID, playerID).BoardData,
+            Turn= game.Turn,
+            LastMove= game.LastMove
+        };
+        return result;
+	}
 }

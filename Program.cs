@@ -21,7 +21,6 @@ builder.Services.AddCors(options => {
                         .AllowAnyMethod();
             });
     });
-builder.Services.AddSignalR();
 
 DependancyInjection.RegisterDependancies(builder);
 
@@ -61,22 +60,6 @@ app.UseRouting();
 
 app.UseCors();
 
-
-// app.UseWebSockets(new WebSocketOptions {
-//         KeepAliveInterval = TimeSpan.FromMinutes(2)
-//     });
-app.UseEndpoints(endpoints => {
-        endpoints.MapHub<WebSocketHub>("/hub/game");
-    });
-// app.Run(async (context) =>
-// {
-//     using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-//     var socketFinishedTcs = new TaskCompletionSource<object>();
-
-//     BackgroundSocketProcessor.AddSocket(webSocket, socketFinishedTcs);
-
-//     await socketFinishedTcs.Task;
-// });
 
 app.MapControllerRoute(
     name: "default",

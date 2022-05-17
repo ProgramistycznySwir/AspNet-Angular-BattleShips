@@ -33,7 +33,6 @@ export class GameComponent {
 
   constructor(private _activatedRoute: ActivatedRoute, private _gameService: GameService, private _playerService: PlayerService, public _dialog: MatDialog) {
     _playerService.player.subscribe(next => this.player = next)
-    // _gameService.game.subscribe(next => this.game = next)
     this._activatedRoute.paramMap.subscribe(params => {
         this.gameID = params.get('id')! ?? null;
         this.fetchGame()
@@ -82,18 +81,7 @@ export class GameComponent {
     if(this.isWaitingForMoveResult == false) {
       this._isWaitingForMoveResult = true
       this._gameService.makeMove(this.game.id, this.player.id, x, y)
-          // .subscribe(tile => this._isWaitingForMoveResult = false,
-          //     err => this.openDialog())
     }
-  }
-
-
-  private addTileToBoard(tile: TileData) {
-    // if(tile) {
-    //   // this.game.boardData.push(tile)
-    // }
-    // else
-    //   console.error(tile)
   }
 
   openDialog() {

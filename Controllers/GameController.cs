@@ -55,4 +55,14 @@ public class GameController : ControllerBase
         return base.Ok(game.GetSanitised());
     }
     public record CreateGameParams(Guid player1_ID, Guid? player2_ID);
+
+    [HttpGet("CheckUpdate/{gameID}/{playerID}/{lastUpdate}")]
+    public ActionResult<TileDataUpdateDTO> CheckForGameUpdate([FromRoute] Guid gameID, [FromRoute] Guid playerID, [FromRoute] DateTime lastUpdate) {
+        var updateData = _gameService.CheckGameUpdate(gameID, playerID, lastUpdate);
+        if(updateData is null)
+            return base.NotFound("There is no updates.");
+
+        updateData.Tiles = updateData.Tiles.Select(e => e.GetSanitised()).ToList();
+        return base.Ok(updateData);
+    }
 }

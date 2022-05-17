@@ -18,4 +18,5 @@ public interface IGameService
     /// <param name="playerID">Pass Player.ID, not PublicID</param>
     /// <returns>Result (hit or miss on enemy ship)</returns>
     public TileData AddMove(Guid gameID, Guid playerID, int x, int y);
+    public TileDataUpdateDTO CheckGameUpdate(Guid gameID, Guid playerID, DateTime lastUpdate);
 }
