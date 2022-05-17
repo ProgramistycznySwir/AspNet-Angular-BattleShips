@@ -13,7 +13,7 @@ export const environment: any = {
 
 	BACK_END_URL: BACK_END_URL,
 	API_ENDPOINT: `https://${BACK_END_URL}`,
-  WEBSOCKET_URL: `ws://${BACK_END_URL}`,
+  WEBSOCKET_URL: `${BACK_END_URL}`,
 
   HTTP_CREDENTIALS: {
     mode: 'cors',

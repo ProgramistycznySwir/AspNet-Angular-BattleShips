@@ -62,9 +62,9 @@ app.UseRouting();
 app.UseCors();
 
 
-app.UseWebSockets(new WebSocketOptions {
-        KeepAliveInterval = TimeSpan.FromMinutes(2)
-    });
+// app.UseWebSockets(new WebSocketOptions {
+//         KeepAliveInterval = TimeSpan.FromMinutes(2)
+//     });
 app.UseEndpoints(endpoints => {
         endpoints.MapHub<WebSocketHub>("/hub/game");
     });

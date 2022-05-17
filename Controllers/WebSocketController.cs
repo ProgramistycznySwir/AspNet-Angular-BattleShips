@@ -9,11 +9,13 @@ public class WebSocketHub : Hub
 {
 	static readonly Dictionary<Guid, string> ConnectedUsers = new();
 
-	public async Task Register(Guid playerID)
+	public async Task RegisterPlayer(Guid playerID)
 	{
+		if(ConnectedUsers.TryGetValue(playerID, out string _))
+			ConnectedUsers.Remove(playerID);
 		ConnectedUsers.Add(playerID, this.Context.ConnectionId);
 	}
-	public async Task Disconnect(Guid playerID)
+	public async Task DisconnectPlayer(Guid playerID)
 	{
 		ConnectedUsers.Remove(playerID);
 	}
@@ -27,5 +29,7 @@ public class WebSocketHub : Hub
 	public struct WebSocketActions
 	{
         public const string UpdateTileData = "updateTileData";
+		public const string RegisterPlayer = "registerPlayer";
+		public const string DisconnectPlayer = "disconnectPlayer";
 	}
 }

@@ -1,48 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import * as signalR from '@microsoft/signalr';
+// import { HubConnectionBuilder } from '@microsoft/signalr';
 import * as Rx from 'rxjs'
 import { webSocket } from 'rxjs/webSocket'
 import { environment } from 'src/environments/environment';
 import { TileData } from 'src/models/tileData';
+import { PlayerService } from './player.service';
 // import { Url } from 'url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  connection: any;
-
-  constructor() {
-    this.initWebSocket();
-    console.warn("UHHHHH")
-    this.connection.start();
-  }
-
-  ngOnInit(): void {
-  }
-
-  initWebSocket() {
-    this.connection = new HubConnectionBuilder()
-      .withUrl(`${environment.WEBSOCKET_URL}hub/game`)
+  private  connection: any = new signalR.HubConnectionBuilder()
+      .withUrl(`${environment.WEBSOCKET_URL}hub/game`, {skipNegotiation: true, transport: signalR.HttpTransportType.WebSockets})
+      .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    this.connection.on('updateTileData', (tileData: TileData) => {
-      this.tileDataUpdates.next(tileData);
+
+  constructor(private _playerService: PlayerService) { 
+    this.connection.onclose(async () => {
+      await this.start();
     });
+    this.connection.on("updateTileData", (data: TileData) => this.tileDataUpdates.next(data));
+    this.start();
   }
 
-  // private wsConnection = webSocket(environment.WEBSOCKET_URL)
+  public async start() {
+    try {
+      await this.connection.start();
+      this.connection.send()
+      console.log("Connected to WebSockets!");
+    } catch (err) {
+      console.log(err);
+      setTimeout(() => this.start(), 5000);
+    }
+  }
+
   private tileDataUpdates = new Rx.Subject<TileData>()
-
-  // constructor() {
-  //   this.wsConnection.subscribe(this.handleWSMessage)
-  // }
-
   public subscribeToTileData(nextCallback: ((value: TileData) => void)): void {
     this.tileDataUpdates.subscribe(nextCallback)
   }
-
-  // private handleWSMessage(mess: any): void {
-  //   this.tileDataUpdates.next(mess)
-  // }
 }
