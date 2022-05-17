@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as Rx from 'rxjs'
+import { webSocket } from 'rxjs/webSocket'
+import { environment } from 'src/environments/environment';
+import { TileData } from 'src/models/tileData';
 // import { Url } from 'url';
 
 @Injectable({
@@ -7,39 +10,18 @@ import * as Rx from 'rxjs'
 })
 export class WebSocketService {
 
-  constructor() { }
+  private wsConnection = webSocket(environment.WEBSOCKET_URL)
+  private tileDataUpdates = new Rx.Subject<TileData>()
 
-  private subject!: Rx.Subject<MessageEvent>
-
-  public connect(url: URL): Rx.Subject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.create(url)
-      this.subject.pipe(message => console.info(message)!)
-      console.log(`Successfully connected to: ${url}`)
-    }
-
-    return this.subject
+  constructor() {
+    this.wsConnection.subscribe(this.handleWSMessage)
   }
-  private create(url: URL): Rx.Subject<MessageEvent> {
-    let ws = new WebSocket(url);
 
-    let observable = Rx.Observable.create(
-      (obs: Rx.Observer<MessageEvent>) => {
-        ws.onmessage = obs.next.bind(obs)
-        ws.onerror = obs.error.bind(obs)
-        ws.onclose = obs.complete.bind(obs)
-        return ws.close.bind(ws)
-      }
-    )
+  public subscribeToTileData(nextCallback: ((value: TileData) => void)): void {
+    this.tileDataUpdates.subscribe(nextCallback)
+  }
 
-    let observer = {
-      next: (data: Object) => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data))
-        }
-      }
-    }
-
-    return Rx.Subject.create(observer, observable)
+  private handleWSMessage(mess: any): void {
+    this.tileDataUpdates.next(mess)
   }
 }

@@ -17,14 +17,8 @@ export class GameService {
   tiles: BehaviorSubject<TileData[]> = new BehaviorSubject<TileData[]>(null!)
 
   constructor(private _httpClient: HttpClient, private _webSocketService: WebSocketService) {
-    // _httpClient.get(`${environment.API_ENDPOINT}`)
-    // this.tiles = <Subject<TileData[]>>_webSocketService
-    //     .connect(environment.WEBSOCKET_URL)
-    //     .map((res: MessageEvent): TileData => {
-    //       let data = JSON.parse(res.data)
-    //       return data
-    //     })
     this.game.subscribe(next => this.tiles.next(next?.boardData))
+    _webSocketService.subscribeToTileData(this.addTile)
   }
 
 
@@ -71,22 +65,12 @@ export class GameService {
         y: y
       })
           .pipe(res => { console.info(res); return res})
-          .subscribe(res => {
-            let game = Object.create(this.game.getValue()) as Game
-            game.turn = (game.turn + (res.isHit ? 0 : 1)) % game.players.length
-            game.boardData = [...this.tiles.getValue(), res]
-            this.game.next(
-              game
-            //   {
-            //   id: game.id,
-            //   creationTime: game.creationTime,
-            //   lastMove: game.lastMove,
-            //   turn: (game.turn + res.isHit ? 1 : 0) % game.players.length,
-            //   players: game.players,
-            //   isFinished: game.isFinished,
-            //   result: 
-            // }
-            ) } )
-    // return requests
+          .subscribe(res => this.addTile(res) )
+  }
+  private addTile(tile: TileData) {
+    let game = Object.create(this.game.getValue()) as Game
+    game.turn = (game.turn + (tile.isHit ? 0 : 1)) % game.players.length
+    game.boardData = [...this.tiles.getValue(), tile]
+    this.game.next(game)
   }
 }

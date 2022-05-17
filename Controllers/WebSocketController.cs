@@ -1,43 +1,31 @@
-using System.Net.WebSockets;
+// using System.Net.WebSockets;
+using HappyTeam_BattleShips.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HappyTeam_BattleShips.Controllers;
 
-public class WebSocketController : ControllerBase
+public class WebSocketController : Hub
 {
-    [HttpGet("/ws")]
-    public async Task Get()
-    {
-        if (HttpContext.WebSockets.IsWebSocketRequest)
-        {
-            using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await Echo(webSocket);
-        }
-        else
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-    }
+	static readonly Dictionary<Guid, string> ConnectedUsers = new();
 
-	private static async Task Echo(WebSocket webSocket)
+	public async Task Register(Guid playerID)
 	{
-		var buffer = new byte[1024 * 4];
-		var receiveResult = await webSocket.ReceiveAsync(
-			new ArraySegment<byte>(buffer), CancellationToken.None);
+		ConnectedUsers.Add(playerID, this.Context.ConnectionId);
+	}
+	public async Task Disconnect(Guid playerID)
+	{
+		ConnectedUsers.Remove(playerID);
+	}
 
-		while (!receiveResult.CloseStatus.HasValue)
-		{
-			await webSocket.SendAsync(
-				new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-				receiveResult.MessageType,
-				receiveResult.EndOfMessage,
-				CancellationToken.None);
+	public async Task UpdateTileData(Guid playerID, TileData tileData)
+	{
+		if(ConnectedUsers.TryGetValue(playerID, out string value))
+			await Clients.User(value).SendAsync(WebSocketActions.UpdateTileData, tileData);
+	}
 
-			receiveResult = await webSocket.ReceiveAsync(
-				new ArraySegment<byte>(buffer), CancellationToken.None);
-		}
-
-		await webSocket.CloseAsync(
-				receiveResult.CloseStatus.Value,
-				receiveResult.CloseStatusDescription,
-				CancellationToken.None);
+	public struct WebSocketActions
+	{
+        public const string UpdateTileData = "updateTileData";
 	}
 }

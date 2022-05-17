@@ -83,9 +83,10 @@ public class GameService : IGameService
         else 
             tile.IsHit = true;
 
+        _context.SaveChanges();
 
         //TODO: Implement notifying other players via WebSockets.
-        _context.SaveChanges();
+        
 
         return tile;
     }
