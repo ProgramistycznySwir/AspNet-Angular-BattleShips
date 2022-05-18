@@ -28,6 +28,8 @@ W czwartek wraz ze zbliżaniem się terminu jaki zadeklarowałem, jakość kodu 
 Na chwilę obecną API jest w głównej mierze skończone. Front-end podobnie, choć pozostawia wiele do życzenia. Można przeprowadzić rozgrywkę, ale system nie komunikuje w żaden sposób wygranej, oraz nawet tego, że przeciwnik dokonał ruchu (nie udało mi się jeszcze zaimplementować WebSocket'ów które są niezbędne do tego).
 Sama komunikacja z API REST'owym jest nie do zarzucenia (pomijając brak checków po stronie klient'a).
 
+Po weekendzie jedyne co udało mi się zrobić, to zachorować, przez co nie miałem sił na uczenie się WebSocket'ów i zamiast tego zaimplementowałem tymczasowe, naiwne podejście pytania serwer co 5 sekund czy nie ma aktualizacji (endpoint "Game/CheckUpdate/"). Sama próba implementacji WebSocket'ów sprawiła, że ruszyłem całą logikę z manipulacją danymi do serwisów, co polepszyło jakość kodu, co jest na plus.
+
 # Funkcjonalności:
 - Użytkownik może strzorzyć nowe konto.
 - Użytkownik może "zalogować" się do już utworzonego konta jeśli posiada jego prywatne ID.
@@ -35,4 +37,4 @@ Sama komunikacja z API REST'owym jest nie do zarzucenia (pomijając brak checkó
 - Zalogowany użytkownik może utworzyć rozgrywkę z dowolnym graczem po wprowadzeniu jego publicznego ID.
 - Zalogowany użytkownik może dołączyć do rozgrywek których jest członkiem.
 - Zalogowany użytkownik może dokonywać ruchów na planszy gry w której uczestniczy.
-- Po przeładowaniu strony aplikacja dostarcza zaktualizowany stan gry.
+- Aplikacja co 5 sekund odświeża swoje informacje o grze pozwalając na rozgrywkę w czasie pseudo-rzeczywistym.
